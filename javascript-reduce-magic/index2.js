@@ -17,3 +17,38 @@ console.timeEnd('ReducerMethod');
 console.time('FunctionalMethod');
 dataset.filter((i) => i % 2 == 0).map((i) => i * 2);
 console.timeEnd('FunctionalMethod');
+
+// composing functions
+
+function increment(input) {
+  return input + 1;
+}
+
+function decrement(input) {
+  return input - 1;
+}
+
+function double(input) {
+  return input * 2;
+}
+
+function halve(input) {
+  return input / 2;
+}
+
+const pipeline = [increment, double, decrement, halve];
+
+let result = pipeline.reduce((acc, fn) => {
+  return fn(acc);
+}, 6);
+
+console.log(result);
+
+Number.prototype.pipe = function pipe() {
+  let argFnList = [...pipe.arguments];
+  return argFnList.reduce((acc, fn) => {
+    return fn(acc);
+  }, this.valueOf());
+};
+
+console.log(Number(6).pipe(increment, double, decrement, halve));
